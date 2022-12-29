@@ -1,20 +1,15 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-grid>
+    <ion-row *ngFor="let row of grid; let i = index">
+      <ion-col *ngFor="let col of row; let j = index" class="box" (click)="play(i,j)">
+        {{ col }}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div class="finish" *ngIf="gameOver" [@enterAnimation]>
+    <p *ngIf="winner">Le joueur {{ winner }} a gagné !</p>
+    <p *ngIf="!winner">Match nul !</p>
+    <ion-button (click)="reset()">Rejouer</ion-button>
   </div>
 </ion-content>
