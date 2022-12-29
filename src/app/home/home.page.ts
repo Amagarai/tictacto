@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { NgForm } from '@angular/forms';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -28,10 +30,26 @@ export class HomePage {
   gameOver: boolean = false;
   // Stocke le gagnant (X ou O) si la partie est terminée
   winner: 'X' | 'O' | any= null
-  color: string = '';
-  constructor() {}
+  player1: string = '';
+  player2: string = '';
+  gameStart: boolean = false;
+  winPlayer1 : number = 0
+  winPlayer2 : number = 0
+
+  constructor(private alerte: AlertController) {}
 
 
+  definePlayer(data: NgForm){
+    if (data.value.player1.trim() === '' || data.value.player2.trim() === '') {
+      this.presentAlert();
+    } else {
+      this.player1 = data.value.player1
+      this.player2 = data.value.player2
+      this.gameStart = true
+      data.reset();
+    }
+
+  }
 
   play(row: number, col: number) {
     // Si la partie est terminée ou si la case est déjà occupée, on ne fait rien
@@ -42,11 +60,6 @@ export class HomePage {
     this.grid[row][col] = this.currentPlayer;
     this.checkGameOver();
     this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
-    if (this.currentPlayer == 'X') {
-      this.color === '2px 3px 4px rgb(2, 85, 194)'
-    } else {
-      this.color === '2px 3px 4px red'
-    }
     // this.color === '2px 3px 4px rgb(2, 85, 194)'? '2px 3px 4px red' : '2px 3px 4px rgb(2, 85, 194)'
   }
 
@@ -56,7 +69,14 @@ export class HomePage {
     for (let i = 0; i < 3; i++) {
       if (this.grid[i][0] !== '' && this.grid[i][0] === this.grid[i][1] && this.grid[i][1] === this.grid[i][2]) {
         this.gameOver = true;
-        this.winner = this.grid[i][0];
+        if (this.grid[i][0] === 'X') {
+          this.winner = this.player1;
+          this.winPlayer1 = this.winPlayer1 + 1
+        }else if(this.grid[i][0] === 'O'){
+          this.winner = this.player2;
+          this.winPlayer2 = this.winPlayer2 + 1
+        }
+        // this.winner = this.grid[i][0];
         return;
       }
     }
@@ -64,20 +84,41 @@ export class HomePage {
     for (let i = 0; i < 3; i++) {
       if (this.grid[0][i] !== '' && this.grid[0][i] === this.grid[1][i] && this.grid[1][i] === this.grid[2][i]) {
         this.gameOver = true;
-        this.winner = this.grid[0][i];
+        if (this.grid[0][i] === 'X') {
+          this.winner = this.player1;
+          this.winPlayer1 = this.winPlayer1 + 1
+        }else if(this.grid[0][i] === 'O'){
+          this.winner = this.player2;
+          this.winPlayer2 = this.winPlayer2 + 1
+        }
+        // this.winner = this.grid[0][i];
         return;
       }
     }
     // Vérifie si la première diagonale est complète et contient les mêmes symboles
     if (this.grid[0][0] !== '' && this.grid[0][0] === this.grid[1][1] && this.grid[1][1] === this.grid[2][2]) {
       this.gameOver = true;
-      this.winner = this.grid[0][0];
+      if (this.grid[0][0] === 'X') {
+        this.winner = this.player1;
+        this.winPlayer1 = this.winPlayer1 + 1
+      }else if(this.grid[0][0] === 'O'){
+        this.winner = this.player2;
+        this.winPlayer2 = this.winPlayer2 + 1
+      }
+      // this.winner = this.grid[0][0];
       return;
     }
     // Vérifie si la seconde diagonale est complète et contient les mêmes symboles
     if (this.grid[0][2] !== '' && this.grid[0][2] === this.grid[1][1] && this.grid[1][1] === this.grid[2][0]) {
       this.gameOver = true;
-      this.winner = this.grid[0][2];
+      if (this.grid[0][2] === 'X') {
+        this.winner = this.player1;
+        this.winPlayer1 = this.winPlayer1 + 1
+      }else if(this.grid[0][2] === 'O'){
+        this.winner = this.player2;
+        this.winPlayer2 = this.winPlayer2 + 1
+      }
+      // this.winner = this.grid[0][2];
       return;
     }
     // Vérifie s'il y a un match nul
@@ -100,6 +141,28 @@ export class HomePage {
     this.currentPlayer = 'X';
     this.gameOver = false;
     this.winner = null;
+  }
+
+  newPart(){
+    this.grid = [['', '', ''], ['', '', ''], ['', '', '']];
+    this.currentPlayer = 'X';
+    this.gameOver = false;
+    this.winner = null;
+    this.gameStart = false;
+    this.winPlayer1 = 0;
+    this.winPlayer2 = 0;
+  }
+
+  async presentAlert() {
+    const alert = await this.alerte.create({
+      // subHeader: 'Subtitle',
+      mode: 'ios',
+      cssClass: 'my-custom-class',
+      message: '<b>Remplissez tout les champs</b>',
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 
 }

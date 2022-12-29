@@ -1,11 +1,30 @@
 ion-content{
   --ion-background-color: rgb(214, 214, 214);
 }
+.head{
+  margin-top: 60px;
+}
+
+.form{
+  margin-top: 90px;
+  .item{
+    --ion-background-color: #fff !important;
+    // margin-top: 120px;
+    margin: 10px 20px;
+    border-radius: 15px;
+  }
+  ion-button{
+    background-color: rgb(255, 166, 0);
+    color: #fff;
+    border-radius: 15px;
+  }
+}
+
 
 .player{
   display: flex;
   justify-content: space-around;
-  margin-top: 100px;
+  margin-top: 40px;
   box-shadow: 3px 3px 3px rgb(238, 171, 1);
   .italic{
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -63,6 +82,34 @@ ion-col:nth-child(3){
   text-shadow: 2px 3px 4px red;
 }
 
+.winner{
+  font-size: 15px;
+  color: orange;
+  font-style: italic;
+  font-weight: bold;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.newP{
+  background-color: orange;
+  color: #fff;
+  border-radius: 15px;
+}
+
+.replay{
+  background-color: rgb(0, 32, 212);
+  color: #fff;
+  border-radius: 15px;
+}
+
+.winX{
+  color: rgb(0, 32, 212);
+  font-size: 16px;
+}
+.winY{
+  color: rgb(0, 32, 212);
+  font-size: 16px;
+}
 
 
 
