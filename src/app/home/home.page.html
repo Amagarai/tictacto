@@ -1,8 +1,15 @@
 <ion-content [fullscreen]="true">
+  <div class="player">
+    <p class="italic">player 1 </p>
+    <p class="count">
+      0-0
+    </p>
+    <p class="italic">player 2</p>
+  </div>
   <ion-grid>
     <ion-row *ngFor="let row of grid; let i = index">
       <ion-col *ngFor="let col of row; let j = index" class="box" (click)="play(i,j)">
-        {{ col }}
+        <span class="letter" [ngClass]="{ 'x': col === 'X', 'o': col === 'O' }">{{ col }}</span>
       </ion-col>
     </ion-row>
   </ion-grid>

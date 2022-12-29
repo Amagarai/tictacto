@@ -28,7 +28,7 @@ export class HomePage {
   gameOver: boolean = false;
   // Stocke le gagnant (X ou O) si la partie est terminée
   winner: 'X' | 'O' | any= null
-
+  color: string = '';
   constructor() {}
 
 
@@ -42,6 +42,12 @@ export class HomePage {
     this.grid[row][col] = this.currentPlayer;
     this.checkGameOver();
     this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
+    if (this.currentPlayer == 'X') {
+      this.color === '2px 3px 4px rgb(2, 85, 194)'
+    } else {
+      this.color === '2px 3px 4px red'
+    }
+    // this.color === '2px 3px 4px rgb(2, 85, 194)'? '2px 3px 4px red' : '2px 3px 4px rgb(2, 85, 194)'
   }
 
 
