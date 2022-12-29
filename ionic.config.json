@@ -1,0 +1,7 @@
+{
+  "name": "tictacto",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
