@@ -111,6 +111,23 @@ ion-col:nth-child(3){
   font-size: 16px;
 }
 
+.logout{
+  text-align: center;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+
+  img{
+    height: 50px;
+  }
+  ion-icon{
+    color: red;
+    font-weight: bold;
+    font-size: larger;
+  }
+
+}
+
 
 
 

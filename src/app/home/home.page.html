@@ -64,4 +64,8 @@
       </div>
     </div>
   </div>
+  <div class="logout" (click)="newPart()" *ngIf="!gameOver && gameStart === true"[@enterAnimation]>
+    <img src="../../assets/quit.png" alt="Quitter">
+    <p><ion-icon name="log-in-outline"></ion-icon></p>
+  </div>
 </ion-content>

@@ -35,6 +35,7 @@ export class HomePage {
   gameStart: boolean = false;
   winPlayer1 : number = 0
   winPlayer2 : number = 0
+  enCour: boolean = false ;
 
   constructor(private alerte: AlertController) {}
 
@@ -46,6 +47,7 @@ export class HomePage {
       this.player1 = data.value.player1
       this.player2 = data.value.player2
       this.gameStart = true
+      this.enCour = true;
       data.reset();
     }
 
@@ -59,6 +61,7 @@ export class HomePage {
     // On met à jour l'état de la grille et de la partie
     this.grid[row][col] = this.currentPlayer;
     this.checkGameOver();
+    this.enCour = true;
     this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
     // this.color === '2px 3px 4px rgb(2, 85, 194)'? '2px 3px 4px red' : '2px 3px 4px rgb(2, 85, 194)'
   }
@@ -69,12 +72,15 @@ export class HomePage {
     for (let i = 0; i < 3; i++) {
       if (this.grid[i][0] !== '' && this.grid[i][0] === this.grid[i][1] && this.grid[i][1] === this.grid[i][2]) {
         this.gameOver = true;
+        this.enCour = false;
         if (this.grid[i][0] === 'X') {
           this.winner = this.player1;
           this.winPlayer1 = this.winPlayer1 + 1
+          this.enCour = false;
         }else if(this.grid[i][0] === 'O'){
           this.winner = this.player2;
           this.winPlayer2 = this.winPlayer2 + 1
+          this.enCour = false;
         }
         // this.winner = this.grid[i][0];
         return;
@@ -84,12 +90,15 @@ export class HomePage {
     for (let i = 0; i < 3; i++) {
       if (this.grid[0][i] !== '' && this.grid[0][i] === this.grid[1][i] && this.grid[1][i] === this.grid[2][i]) {
         this.gameOver = true;
+        this.enCour = false;
         if (this.grid[0][i] === 'X') {
           this.winner = this.player1;
           this.winPlayer1 = this.winPlayer1 + 1
+          this.enCour = false;
         }else if(this.grid[0][i] === 'O'){
           this.winner = this.player2;
           this.winPlayer2 = this.winPlayer2 + 1
+          this.enCour = false;
         }
         // this.winner = this.grid[0][i];
         return;
@@ -98,12 +107,15 @@ export class HomePage {
     // Vérifie si la première diagonale est complète et contient les mêmes symboles
     if (this.grid[0][0] !== '' && this.grid[0][0] === this.grid[1][1] && this.grid[1][1] === this.grid[2][2]) {
       this.gameOver = true;
+      this.enCour = false;
       if (this.grid[0][0] === 'X') {
         this.winner = this.player1;
         this.winPlayer1 = this.winPlayer1 + 1
+        this.enCour = false;
       }else if(this.grid[0][0] === 'O'){
         this.winner = this.player2;
         this.winPlayer2 = this.winPlayer2 + 1
+        this.enCour = false;
       }
       // this.winner = this.grid[0][0];
       return;
@@ -111,12 +123,15 @@ export class HomePage {
     // Vérifie si la seconde diagonale est complète et contient les mêmes symboles
     if (this.grid[0][2] !== '' && this.grid[0][2] === this.grid[1][1] && this.grid[1][1] === this.grid[2][0]) {
       this.gameOver = true;
+      this.enCour = false;
       if (this.grid[0][2] === 'X') {
         this.winner = this.player1;
         this.winPlayer1 = this.winPlayer1 + 1
+        this.enCour = false;
       }else if(this.grid[0][2] === 'O'){
         this.winner = this.player2;
         this.winPlayer2 = this.winPlayer2 + 1
+        this.enCour = false;
       }
       // this.winner = this.grid[0][2];
       return;
@@ -133,6 +148,9 @@ export class HomePage {
     }
     if (full) {
       this.gameOver = true;
+      this.winner = null;
+      this.enCour = false;
+      return;
     }
   }
 
@@ -141,6 +159,7 @@ export class HomePage {
     this.currentPlayer = 'X';
     this.gameOver = false;
     this.winner = null;
+    this.enCour = true;
   }
 
   newPart(){
@@ -151,6 +170,7 @@ export class HomePage {
     this.gameStart = false;
     this.winPlayer1 = 0;
     this.winPlayer2 = 0;
+    this.enCour = false
   }
 
   async presentAlert() {
