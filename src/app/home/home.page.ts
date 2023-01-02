@@ -26,6 +26,10 @@ export class HomePage {
   grid: string[][] = [['', '', ''], ['', '', ''], ['', '', '']];
   // Indique si c'est à X ou à O de jouer
   currentPlayer: 'X' | 'O' = 'X';
+  //pour le mode du jeu (single or multi)
+  mode: 'single' | 'multi' = 'single';
+  //choisis de la dificulté
+  difficulty: 'easy' | 'medium' | 'hard' = 'easy';
   // Indique si la partie est terminée
   gameOver: boolean = false;
   // Stocke le gagnant (X ou O) si la partie est terminée
@@ -53,19 +57,130 @@ export class HomePage {
 
   }
 
+  //Pour le mode facile
+  strategyEasy(grid: string[][]): [number, number] | null {
+    // Récupère les cases vides de la grille
+    const emptyCells : any = [];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (grid[i][j] === '') {
+          emptyCells.push([i, j]);
+        }
+      }
+    }
+    // Choisit une case vide au hasard
+    if (emptyCells.length > 0) {
+      const randomIndex = Math.floor(Math.random() * emptyCells.length);
+      return emptyCells[randomIndex];
+    }
+    return null;
+  }
+
+  //Pour les strategie moyens
+  strategyMedium(grid: string[][]): [number, number] | null {
+    // Récupère les cases vides de la grille
+    const emptyCells : any = [];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (grid[i][j] === '') {
+          emptyCells.push([i, j]);
+        }
+      }
+    }
+    // Essaie de bloquer le prochain coup du joueur
+    for (const cell of emptyCells) {
+      const tempGrid = grid.map(row => row.slice());
+      tempGrid[cell[0]][cell[1]] = 'O';
+      if (this.checkWin(tempGrid, 'X')) {
+        return cell;
+      }
+    }
+    // Essaie de créer une opportunité de victoire
+    for (const cell of emptyCells) {
+      const tempGrid = grid.map(row => row.slice());
+      tempGrid[cell[0]][cell[1]] = 'O';
+      if (this.checkWin(tempGrid, 'O')) {
+        return cell;
+      }
+    }
+    // Choisit une case vide au hasard
+    if (emptyCells.length > 0) {
+      const randomIndex = Math.floor(Math.random() * emptyCells.length);
+      return emptyCells[randomIndex];
+    }
+    return null;
+  }
+
+  //La fonction checkWin() vérifie si le joueur courant peut remporter la partie en jouant dans chaque case vide de la grille.
+   checkWin = (gameState: any, player: any) => {
+    gameState = this.grid;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (gameState[i][j] === '') {
+          // Simule le coup joué par le joueur courant
+          gameState[i][j] = player;
+          // Vérifie si le joueur courant a remporté la partie
+          const result = this.checkGameOver();
+          if (result === player) {
+            // Annule le coup et renvoie true
+            gameState[i][j] = '';
+            return true;
+          }
+          // Annule le coup
+          gameState[i][j] = '';
+        }
+      }
+    }
+    // Aucun coup ne permet de remporter la partie, renvoie false
+    return false;
+  }
+
   play(row: number, col: number) {
     // Si la partie est terminée ou si la case est déjà occupée, on ne fait rien
     if (this.gameOver || this.grid[row][col] !== '') {
       return;
     }
+    // Si on est en mode solo, le joueur courant est toujours X
+    if (this.mode === 'single') {
+      this.currentPlayer = 'X';
+    }
     // On met à jour l'état de la grille et de la partie
     this.grid[row][col] = this.currentPlayer;
     this.checkGameOver();
     this.enCour = true;
-    this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
-    // this.color === '2px 3px 4px rgb(2, 85, 194)'? '2px 3px 4px red' : '2px 3px 4px rgb(2, 85, 194)'
+    // Si la partie n'est pas terminée, on fait jouer l'ordinateur si on est en mode solo
+    if (!this.gameOver && this.mode === 'single') {
+      this.playComputer();
+    } else {
+      this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
+    }
   }
 
+  //Lors qu'on joue contre l'ordinateur
+  playComputer(){
+    // On récupère les cases vides de la grille
+    const emptyCells = [];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (this.grid[i][j] === '') {
+          emptyCells.push([i, j]);
+        }
+      }
+    }
+
+    //**** a tester */
+    // On choisit une case vide au hasard
+    const randomIndex = Math.floor(Math.random() * emptyCells.length);
+    const cell = emptyCells[randomIndex];
+    // On met à jour l'état de la grille et de la partie
+    this.grid[cell[0]][cell[1]] = 'O';
+    this.checkGameOver();
+    // On passe au joueur suivant
+    this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
+    //fin
+  }
+
+  //Selectioner le mode du jeu------------------------------------******************
 
   checkGameOver() {
     // Vérifie si une ligne est complète et contient les mêmes symboles

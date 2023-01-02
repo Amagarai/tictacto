@@ -35,11 +35,13 @@
 
   <div class="start" *ngIf="gameStart === true" [@enterAnimation]>
     <div class="player">
-      <p class="italic">{{player1}} </p>
-      <p class="count">
+      <p class="italic" *ngIf="mode==='multi'">{{player1}} </p>
+      <p class="italic" *ngIf="mode==='single'">Vous</p>
+      <p class="count" >
         {{winPlayer1}}-{{winPlayer2}}
       </p>
-      <p class="italic">{{player2}}</p>
+      <p class="italic" *ngIf="mode==='multi'">{{player2}} </p>
+      <p class="italic" *ngIf="mode==='single'">Ordinateur</p>
     </div>
     <ion-grid>
       <ion-row *ngFor="let row of grid; let i = index">
