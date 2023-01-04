@@ -22,12 +22,14 @@ import { AlertController } from '@ionic/angular';
 })
 export class HomePage {
 
+  choice : boolean = false;
+
   // Tableau représentant l'état de chaque case de la grille
   grid: string[][] = [['', '', ''], ['', '', ''], ['', '', '']];
   // Indique si c'est à X ou à O de jouer
   currentPlayer: 'X' | 'O' = 'X';
   //pour le mode du jeu (single or multi)
-  mode: 'single' | 'multi' = 'single';
+  mode: 'single' | 'multi' = 'multi';
   //choisis de la dificulté
   difficulty: 'easy' | 'medium' | 'hard' = 'easy';
   // Indique si la partie est terminée
@@ -43,6 +45,18 @@ export class HomePage {
 
   constructor(private alerte: AlertController) {}
 
+
+  modeSingle(){
+    this.mode = 'single'
+    this.choice = true;
+    this.gameStart = true
+    this.enCour = true;
+  }
+
+  modeMulti(){
+    this.mode = 'multi'
+    this.choice = true;
+  }
 
   definePlayer(data: NgForm){
     if (data.value.player1.trim() === '' || data.value.player2.trim() === '') {
